@@ -8,11 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'kunde_adresse', schema: 'std')]
 class CustomerAddress
 {
+    #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'customerAddresses')]
-    #[ORM\JoinColumn(name: 'kunden_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'kunde_id', referencedColumnName: 'id', nullable: false)]
     private Customer $customer;
-    #[ORM\ManyToOne(targetEntity: Customer::class)]
-    #[ORM\JoinColumn(name: 'adresse_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Address::class)]
+    #[ORM\JoinColumn(name: 'adresse_id', referencedColumnName: 'adresse_id', nullable: false)]
     private Address $address;
     #[ORM\Column(name: 'geschaeftlich', type: 'boolean', nullable: true)]
     private bool $commercial = false;

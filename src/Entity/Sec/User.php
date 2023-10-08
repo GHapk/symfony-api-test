@@ -19,8 +19,8 @@ class User
     private string $email = '';
     #[ORM\Column(name: 'passwd', type: 'string', length: 60, nullable: false)]
     private string $password = '';
-    #[ORM\OneToOne(targetEntity: Customer::class)]
-    #[ORM\JoinColumn(name: 'vermittler_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(mappedBy: null,  inversedBy: 'user', targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'kundenid', referencedColumnName: 'id')]
     private ?Customer $customer;
     #[ORM\Column(name: 'aktiv', type: 'boolean', nullable: false)]
     private bool $active = false;

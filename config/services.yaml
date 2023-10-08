@@ -20,5 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Provider\CustomerKundeProvider:
+        bind:
+            $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
+            $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Entity\Public;
 
 
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]

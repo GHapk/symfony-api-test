@@ -21,10 +21,10 @@ class BrokerUser extends User
     #[ORM\Column(name: 'aktiv', type: 'boolean', nullable: false)]
     private bool $active = false;
     #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
-    private ?DateTime $lastLogin;
+    private ?DateTime $lastLogin = null;
     #[ORM\OneToOne(targetEntity: Broker::class)]
     #[ORM\JoinColumn(name: 'vermittler_id', referencedColumnName: 'id')]
-    public Broker $broker;
+    public ?Broker $broker = null;
 
     public function __construct()
     {

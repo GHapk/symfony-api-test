@@ -20,7 +20,7 @@ class Address
     #[ORM\Column(name: 'ort', type: 'string', nullable: true)]
     private ?string $city = null;
     #[ORM\ManyToOne(targetEntity: FederalState::class)]
-    #[ORM\JoinColumn(name: 'bundesland', referencedColumnName: 'short')]
+    #[ORM\JoinColumn(name: 'bundesland', referencedColumnName: 'kuerzel')]
     private FederalState $federalState;
 
     public function getId(): int

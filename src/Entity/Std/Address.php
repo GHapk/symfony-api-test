@@ -12,7 +12,7 @@ class Address
     #[ORM\Id()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(name: 'adresse_id', type: 'integer', nullable: false)]
-    private int $id = 0;
+    private ?int $id = null;
     #[ORM\Column(name: 'strasse', type: 'string', nullable: true)]
     private ?string $street = null;
     #[ORM\Column(name: 'plz', type: 'string', length: 10, nullable: true)]
@@ -23,12 +23,12 @@ class Address
     #[ORM\JoinColumn(name: 'bundesland', referencedColumnName: 'kuerzel')]
     private FederalState $federalState;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): Address
+    public function setId(?int $id): Address
     {
         $this->id = $id;
 

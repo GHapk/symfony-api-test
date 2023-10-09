@@ -2,9 +2,17 @@
 declare(strict_types=1);
 namespace App\Dto;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class User
 {
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private string $userName = '';
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Regex('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/')]
     private ?string $passwort = null;
     private int $active = 1;
     private ?\DateTime $lastLogin = null;

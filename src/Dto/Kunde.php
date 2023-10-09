@@ -13,14 +13,22 @@ class Kunde
     #[Assert\NotBlank]
     #[Assert\NotNull]
     private ?string $vorname = null;
+    #[Assert\NotBlank]
+    private ?string $firma = null;
     #[Assert\DateTime]
+    #[Assert\NotNull]
     private ?\DateTime $geburtsdatum = null;
     #[Assert\NotBlank]
     private ?string $geschlecht = null;
     #[Assert\Email]
+    #[Assert\NotNull]
     private ?string $email = null;
     #[Assert\GreaterThan(value: 0)]
     private ?int $vermittlerId = null;
+    /**
+     * @var iterable|Adresse[]
+     */
+    #[Assert\AtLeastOneOf(new Assert\Count(1))]
     private iterable $adressen = [];
     private ?User $user = null;
 
@@ -56,6 +64,18 @@ class Kunde
     public function setVorname(?string $vorname): Kunde
     {
         $this->vorname = $vorname;
+
+        return $this;
+    }
+
+    public function getFirma(): ?string
+    {
+        return $this->firma;
+    }
+
+    public function setFirma(?string $firma): Kunde
+    {
+        $this->firma = $firma;
 
         return $this;
     }
@@ -108,6 +128,9 @@ class Kunde
         return $this;
     }
 
+    /**
+     * @return Adresse[]
+     */
     public function getAdressen(): iterable
     {
         return $this->adressen;

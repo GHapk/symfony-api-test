@@ -2,12 +2,22 @@
 declare(strict_types=1);
 namespace App\Dto;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Adresse
 {
     private ?int $adresseId = null;
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private string $stasse = '';
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?string $plz = '';
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private string $ort = '';
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private string $bundesland = '';
     private ?AdressenDetails $details = null;
 

@@ -6,7 +6,10 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Dto\Kunde;
 use App\Entity\Sec\User;
+use App\Processor\CustomerKundeProcessor;
 use App\Provider\CustomerKundeProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,14 +17,29 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'tbl_kunden', schema: 'std')]
-#[ApiResource(provider: CustomerKundeProvider::class, operations: [
-    new Get(
-        uriTemplate: '/kunden/{id}'
-    ),
-    new GetCollection(
-        uriTemplate: '/kunden'
-    ),
-])]
+#[ApiResource(operations: [
+        new Get(
+            uriTemplate: '/kunden/{id}',
+            security: 'object.getVermittlerId() == user.getId()'
+        ),
+        new GetCollection(
+            uriTemplate: '/kunden'
+        ),
+        new Post(
+            uriTemplate: '/kunden',
+            input: Kunde::class,
+            processor: CustomerKundeProcessor::class
+        ),
+        new Put(
+            uriTemplate: '/kunden/{id}',
+            security: 'object.getVermittlerId() == user.getId()',
+            input: Kunde::class,
+            processor: CustomerKundeProcessor::class
+        )
+    ],
+    security: "is_granted('ROLE_BROKER')",
+    provider: CustomerKundeProvider::class
+)]
 class Customer
 {
     #[ORM\Id]
@@ -53,12 +71,16 @@ class Customer
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: CustomerAddress::class)]
     private iterable|null $customerAddresses;
 
-    public function getId(): string
+    public function __construct() {
+        $this->customerAddresses = new ArrayCollection();
+    }
+
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(string $id): Customer
+    public function setId(?string $id): Customer
     {
         $this->id = $id;
 
@@ -174,7 +196,7 @@ class Customer
     }
 
     /**
-     * @return CustomerAddress[]|null
+     * @return CustomerAddress[]|Collection|null
      */
     public function getCustomerAddresses(): ?iterable
     {
@@ -186,5 +208,22 @@ class Customer
         $this->customerAddresses = $customerAddresses;
 
         return $this;
+    }
+
+    public function getCustomerAddressByAddressIdAndCustomerId(?int $addressId, ?string $customerId): ?CustomerAddress {
+        if (null === $customerId || null === $addressId) {
+            return null;
+        }
+
+        foreach ($this->getCustomerAddresses() as $customerAddress) {
+            if (
+                $customerAddress->getCustomer()->getId() === $customerId &&
+                $customerAddress->getAddress()->getI === $addressId
+            ) {
+                return $customerAddress;
+            }
+        }
+
+        return null;
     }
 }

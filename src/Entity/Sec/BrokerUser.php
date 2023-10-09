@@ -5,10 +5,12 @@ namespace App\Entity\Sec;
 use App\Entity\Std\Broker;
 use \DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity()]
 #[ORM\Table(name: 'vermittler_user', schema: 'sec')]
-class BrokerUser extends User
+class BrokerUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -101,5 +103,28 @@ class BrokerUser extends User
         $this->broker = $broker;
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return [
+            'IS_AUTHENTICATED_FULLY',
+            'ROLE_USER',
+            'ROLE_BROKER',
+        ];
+    }
+
+    public function eraseCredentials()
+    {
+        $this->password = '';
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function isGranted(string $role): bool {
+        return in_array($role, $this->getRoles(), true);
     }
 }

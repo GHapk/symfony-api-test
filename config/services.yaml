@@ -25,5 +25,12 @@ services:
             $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
             $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
 
+    App\Processor\CustomerKundeProcessor:
+        bind:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    app.custom_authenticator:
+        class: App\Service\Authenticator
+        parent: lexik_jwt_authentication.security.jwt_authenticator
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

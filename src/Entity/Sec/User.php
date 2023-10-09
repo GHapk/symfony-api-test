@@ -3,12 +3,42 @@ declare(strict_types=1);
 
 namespace App\Entity\Sec;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Provider\UserEntityUserDtoProvider;
 use \DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Std\Customer;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user', schema: "sec")]
+#[ApiResource(operations: [
+    new Get(
+        uriTemplate: '/user/{id}',
+    ),
+    new GetCollection(
+        uriTemplate: '/user',
+    ),
+    new Post(
+        uriTemplate: '/user',
+        input: \App\Dto\User::class,
+        processor: UserEntityUserDtoProvider::class
+    ),
+    new Put(
+        uriTemplate: '/user/{id}',
+        input: \App\Dto\User::class,
+        processor: UserEntityUserDtoProvider::class
+    ),
+    new Delete(
+        uriTemplate: '/user/{id}',
+    ),
+],
+    security: "is_granted('ROLE_BROKER')"
+)]
 class User
 {
     #[ORM\Id()]

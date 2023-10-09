@@ -28,8 +28,7 @@ class Kunde
     /**
      * @var iterable|Adresse[]
      */
-    #[Assert\AtLeastOneOf(new Assert\Count(1))]
-    private iterable $adressen = [];
+    private array $adressen = [];
     private ?User $user = null;
 
     public function getId(): ?string

@@ -31,7 +31,7 @@ class CustomerKundeProvider implements ProviderInterface
             $kunden = [];
             $customers = $this->collectionProvider->provide($operation, $uriVariables, $context);
             foreach ($customers as $customer) {
-                $kunden[] = $this->customerToKunde($customer);
+                $kunden[] = self::customerToKunde($customer);
             }
 
             return $kunden;
@@ -40,13 +40,13 @@ class CustomerKundeProvider implements ProviderInterface
         $customer = $this->itemProvider->provide($operation, $uriVariables, $context);
 
         if ($customer !== null) {
-            return $this->customerToKunde($customer);
+            return self::customerToKunde($customer);
         }
 
         return null;
     }
 
-    private function customerToKunde(Customer $customer): Kunde {
+    public static function customerToKunde(Customer $customer): Kunde {
         $kunde = (new Kunde())
             ->setId($customer->getId())
             ->setName($customer->getLastName())
@@ -59,25 +59,12 @@ class CustomerKundeProvider implements ProviderInterface
         $adressen = [];
 
         foreach ($customer->getCustomerAddresses() as $customerAddress) {
-            $adresse = (new Adresse())
-                ->setAdresseId($customerAddress->getAddress()->getId())
-                ->setStasse($customerAddress->getAddress()->getStreet())
-                ->setPlz($customerAddress->getAddress()->getZip())
-                ->setOrt($customerAddress->getAddress()->getCity())
-                ->setBundesland($customerAddress->getAddress()->getFederalState()->getShort());
-            $adressenDetails = (new AdressenDetails())
-                ->setRechnungsadresse($customerAddress->isBillingAddress())
-                ->setGeschaeftlich($customerAddress->isCommercial());
-            $adresse->setDetails($adressenDetails);
-            $adressen[] = $adresse;
+            $adressen[] = CustomerAddressAdresseProvider::customerAddressToAdresse($customerAddress);
         }
         $kunde->setAdressen($adressen);
         if ($customer->getUser() !== null) {
             $kunde->setUser(
-                (new User())
-                    ->setUserName($customer->getUser()->getEmail())
-                    ->setActive($customer->getUser()->isActive() ? 1 : 0)
-                    ->setLastLogin($customer->getUser()->getLastLogin())
+                UserEntityUserDtoProvider::userEntityToDto($customer->getUser())
             );
         }
 

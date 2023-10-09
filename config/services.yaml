@@ -24,8 +24,24 @@ services:
         bind:
             $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
             $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+    App\Provider\CustomerAddressAdresseProvider:
+        bind:
+            $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
+            $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+    App\Provider\UserEntityUserDtoProvider:
+        bind:
+            $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
+            $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+
 
     App\Processor\CustomerKundeProcessor:
+        bind:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Controller\GetCustomerListController:
+        bind:
+            $entityManager: '@doctrine.orm.entity_manager'
+    App\Controller\GetCustomerAddressListController:
         bind:
             $entityManager: '@doctrine.orm.entity_manager'
 

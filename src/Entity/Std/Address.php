@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Entity\Std;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Public\FederalState;
 use Doctrine\ORM\Mapping as ORM;
 

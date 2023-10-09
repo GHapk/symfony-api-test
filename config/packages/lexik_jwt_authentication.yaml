@@ -8,7 +8,7 @@ lexik_jwt_authentication:
         # look for a token as Authorization Header
         authorization_header:
             enabled: true
-            prefix: ''
+            prefix: Bearer
             name: Authorization
     api_platform:
         check_path: /api/auth

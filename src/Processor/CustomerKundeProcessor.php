@@ -13,10 +13,11 @@ use App\Entity\Std\Customer;
 use App\Entity\Std\CustomerAddress;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class CustomerKundeProcessor implements ProcessorInterface
 {
-    public function __construct(private EntityManager $entityManager) {}
+    public function __construct(private EntityManager $entityManager, private Security $security) {}
 
     /**
      * @param Kunde $data
@@ -43,7 +44,7 @@ final class CustomerKundeProcessor implements ProcessorInterface
             $customer = new Customer();
             $user = (new User())
                 ->setBroker(
-                    $this->entityManager->getReference(Broker::class, $data->getVermittlerId())
+                    $this->security->getUser()->getBroker()
                 );
         }
         $customer

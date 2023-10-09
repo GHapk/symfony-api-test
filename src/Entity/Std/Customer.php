@@ -3,19 +3,22 @@ declare(strict_types=1);
 namespace App\Entity\Std;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\GetCustomerListController;
 use App\Dto\Kunde;
 use App\Entity\Sec\User;
 use App\Processor\CustomerKundeProcessor;
 use App\Provider\CustomerKundeProvider;
+use App\Repository\std\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\Table(name: 'tbl_kunden', schema: 'std')]
 #[ApiResource(operations: [
         new Get(
@@ -23,7 +26,9 @@ use Doctrine\ORM\Mapping as ORM;
             security: 'object.getVermittlerId() == user.getId()'
         ),
         new GetCollection(
-            uriTemplate: '/kunden'
+            uriTemplate: '/kunden',
+            controller: GetCustomerListController::class,
+            provider: CustomerKundeProvider::class,
         ),
         new Post(
             uriTemplate: '/kunden',
@@ -35,7 +40,11 @@ use Doctrine\ORM\Mapping as ORM;
             security: 'object.getVermittlerId() == user.getId()',
             input: Kunde::class,
             processor: CustomerKundeProcessor::class
-        )
+        ),
+        new Delete(
+            uriTemplate: '/kunden/{id}',
+            security: 'object.getVermittlerId() == user.getId()'
+        ),
     ],
     security: "is_granted('ROLE_BROKER')",
     provider: CustomerKundeProvider::class
@@ -54,8 +63,8 @@ class Customer
     private ?string $company = null;
     #[ORM\Column(name: 'geburtsdatum', type: 'datetime', nullable: true)]
     private ?\DateTime $birthday = null;
-    #[ORM\Column(name: 'geloescht', type: 'boolean', nullable: true)]
-    private bool $deleted = false;
+    #[ORM\Column(name: 'geloescht', type: 'integer', nullable: true)]
+    private int $deleted = 0;
     #[ORM\Column(name: 'geschlecht', type: 'string', nullable: true)]
     private ?string $gender = null;
     #[ORM\Column(name: 'email', type: 'string', nullable: true)]
@@ -135,12 +144,12 @@ class Customer
         return $this;
     }
 
-    public function isDeleted(): bool
+    public function isDeleted(): int
     {
         return $this->deleted;
     }
 
-    public function setDeleted(bool $deleted): Customer
+    public function setDeleted(int $deleted): Customer
     {
         $this->deleted = $deleted;
 

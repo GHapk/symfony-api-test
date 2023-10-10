@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\DeleteCustomerController;
 use App\Controller\GetCustomerListController;
 use App\Dto\Kunde;
 use App\Entity\Sec\User;
@@ -23,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(operations: [
         new Get(
             uriTemplate: '/kunden/{id}',
-            security: 'object.getVermittlerId() == user.getId()'
+            security: 'object.getVermittlerId() == user.getBroker().getId() and object.getGeloescht() == 0',
         ),
         new GetCollection(
             uriTemplate: '/kunden',
@@ -37,13 +38,14 @@ use Doctrine\ORM\Mapping as ORM;
         ),
         new Put(
             uriTemplate: '/kunden/{id}',
-            security: 'object.getVermittlerId() == user.getId()',
+            security: 'object.getVermittlerId() == user.getBroker().getId()',
             input: Kunde::class,
             processor: CustomerKundeProcessor::class
         ),
         new Delete(
             uriTemplate: '/kunden/{id}',
-            security: 'object.getVermittlerId() == user.getId()'
+            controller: DeleteCustomerController::class,
+            security: 'object.getVermittlerId() == user.getBroker().getId()'
         ),
     ],
     security: "is_granted('ROLE_BROKER')",
@@ -72,7 +74,7 @@ class Customer
     #[ORM\ManyToOne(targetEntity: Broker::class, inversedBy: 'customers')]
     #[ORM\JoinColumn(name: 'vermittler_id', referencedColumnName: 'id')]
     private ?Broker $broker = null;
-    #[ORM\OneToOne(mappedBy: 'customer', inversedBy: null, targetEntity: User::class)]
+    #[ORM\OneToOne(mappedBy: 'customer', inversedBy: null, targetEntity: User::class, cascade: ['remove'])]
     private ?User $user = null;
     /**
      * @var CustomerAddress[]|Collection|null

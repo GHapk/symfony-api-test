@@ -8,23 +8,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Adresse
 {
     #[Groups('read')]
-    private ?int $adresseId = null;
+    protected ?int $adresseId = null;
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
-    private string $stasse = '';
+    protected string $stasse = '';
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
-    private ?string $plz = '';
+    #[Assert\Length(min: 1, max: 10)]
+    protected ?string $plz = '';
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
-    private string $ort = '';
+    protected string $ort = '';
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
-    private string $bundesland = '';
+    protected string $bundesland = '';
     protected int $brokerId = 0;
 
     public function getAdresseId(): ?int

@@ -14,7 +14,7 @@ security:
             security: false
         #
         api:
-            pattern: ^/api/
+            pattern: ^/foo/
             stateless: true
             provider: users
             json_login:
@@ -38,6 +38,6 @@ security:
     access_control:
         - { path: ^/$, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI
         - { path: ^/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
-        - { path: ^/api/auth, roles: PUBLIC_ACCESS }
-        - { path: ^/api$, roles: PUBLIC_ACCESS }
+        - { path: ^/foo/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/foo$, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

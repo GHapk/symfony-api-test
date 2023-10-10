@@ -9,6 +9,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Dto\UserWrite;
+use App\Processor\UserDtoUserEntityProcessor;
 use App\Provider\UserEntityUserDtoProvider;
 use \DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,19 +21,21 @@ use App\Entity\Std\Customer;
 #[ApiResource(operations: [
     new Get(
         uriTemplate: '/user/{id}',
+        provider: UserEntityUserDtoProvider::class
     ),
     new GetCollection(
         uriTemplate: '/user',
+        provider: UserEntityUserDtoProvider::class
     ),
     new Post(
         uriTemplate: '/user',
-        input: \App\Dto\User::class,
-        processor: UserEntityUserDtoProvider::class
+        input: UserWrite::class,
+        processor: UserDtoUserEntityProcessor::class
     ),
     new Put(
         uriTemplate: '/user/{id}',
-        input: \App\Dto\User::class,
-        processor: UserEntityUserDtoProvider::class
+        input: UserWrite::class,
+        processor: UserDtoUserEntityProcessor::class
     ),
     new Delete(
         uriTemplate: '/user/{id}',
@@ -43,8 +47,8 @@ class User
 {
     #[ORM\Id()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
-    private int $id = 0;
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false, insertable: false, updatable: false)]
+    private ?int $id = null;
     #[ORM\Column(name: 'email', type: 'string', length:200, nullable: false)]
     private string $email = '';
     #[ORM\Column(name: 'passwd', type: 'string', length: 60, nullable: false)]
@@ -52,17 +56,17 @@ class User
     #[ORM\OneToOne(mappedBy: null,  inversedBy: 'user', targetEntity: Customer::class)]
     #[ORM\JoinColumn(name: 'kundenid', referencedColumnName: 'id')]
     private ?Customer $customer;
-    #[ORM\Column(name: 'aktiv', type: 'boolean', nullable: false)]
-    private bool $active = false;
+    #[ORM\Column(name: 'aktiv', type: 'integer', nullable: false)]
+    private int $active = 0;
     #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
     private ?DateTime $lastLogin;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): User
+    public function setId(?int $id): User
     {
         $this->id = $id;
 
@@ -105,12 +109,12 @@ class User
         return $this;
     }
 
-    public function isActive(): bool
+    public function isActive(): int
     {
         return $this->active;
     }
 
-    public function setActive(bool $active): User
+    public function setActive(int $active): User
     {
         $this->active = $active;
 

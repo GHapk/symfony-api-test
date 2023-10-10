@@ -22,7 +22,7 @@ class CustomerAddress
     #[ORM\Column(name: 'rechnungsadresse', type: 'boolean', nullable: true)]
     private bool $billingAddress = false;
     #[ORM\Column(name: 'geloescht', type: 'boolean', nullable: true)]
-    private bool $deleted = false;
+    private int $deleted = 0;
 
     public function getCustomer(): Customer
     {
@@ -72,12 +72,12 @@ class CustomerAddress
         return $this;
     }
 
-    public function isDeleted(): bool
+    public function isDeleted(): int
     {
         return $this->deleted;
     }
 
-    public function setDeleted(bool $deleted): CustomerAddress
+    public function setDeleted(int $deleted): CustomerAddress
     {
         $this->deleted = $deleted;
 

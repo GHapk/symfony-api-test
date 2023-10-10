@@ -1,14 +1,11 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Provider;
 
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Dto\Adresse;
-use App\Dto\AdressenDetails;
-use App\Dto\Kunde;
-use App\Dto\User;
+use App\Dto\KundeRead;
 use App\Entity\Std\Customer;
 
 class CustomerKundeProvider implements ProviderInterface
@@ -23,9 +20,9 @@ class CustomerKundeProvider implements ProviderInterface
      * @param array $uriVariables
      * @param array $context
      *
-     * @return Kunde|Kunde[]|null
+     * @return KundeRead|KundeRead[]|null
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): Kunde|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): KundeRead|array|null
     {
         if ($operation instanceof CollectionOperationInterface) {
             $kunden = [];
@@ -46,8 +43,9 @@ class CustomerKundeProvider implements ProviderInterface
         return null;
     }
 
-    public static function customerToKunde(Customer $customer): Kunde {
-        $kunde = (new Kunde())
+    public static function customerToKunde(Customer $customer): KundeRead {
+        $kunde = (new KundeRead())
+            ->setGeloescht($customer->isDeleted())
             ->setId($customer->getId())
             ->setName($customer->getLastName())
             ->setVorname($customer->getFirstName())

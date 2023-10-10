@@ -6,30 +6,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Kunde
 {
-    private ?string $id = null;
+    protected ?string $id = null;
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    private ?string $name = null;
+    #[Assert\Length(max: 255)]
+    protected ?string $name = null;
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    private ?string $vorname = null;
+    #[Assert\Length(max: 255)]
+    protected ?string $vorname = null;
     #[Assert\NotBlank]
-    private ?string $firma = null;
-    #[Assert\DateTime]
+    protected ?string $firma = null;
     #[Assert\NotNull]
-    private ?\DateTime $geburtsdatum = null;
-    #[Assert\NotBlank]
-    private ?string $geschlecht = null;
+    #[Assert\Date]
+    protected ?\DateTime $geburtsdatum = null;
+    #[Assert\NotNull]
+    #[Assert\Choice(choices: ['männlich', 'weiblich', 'divers'])]
+    protected ?string $geschlecht = null;
     #[Assert\Email]
     #[Assert\NotNull]
-    private ?string $email = null;
+    protected ?string $email = null;
     #[Assert\GreaterThan(value: 0)]
-    private ?int $vermittlerId = null;
-    /**
-     * @var iterable|Adresse[]
-     */
-    private array $adressen = [];
-    private ?User $user = null;
+    protected ?int $vermittlerId = null;
+    protected int $geloescht = 0;
 
     public function getId(): ?string
     {
@@ -127,29 +126,14 @@ class Kunde
         return $this;
     }
 
-    /**
-     * @return Adresse[]
-     */
-    public function getAdressen(): iterable
+    public function getGeloescht(): int
     {
-        return $this->adressen;
+        return $this->geloescht;
     }
 
-    public function setAdressen(iterable $adressen): Kunde
+    public function setGeloescht(int $geloescht): Kunde
     {
-        $this->adressen = $adressen;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): Kunde
-    {
-        $this->user = $user;
+        $this->geloescht = $geloescht;
 
         return $this;
     }

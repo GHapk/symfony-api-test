@@ -1,16 +1,13 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Provider;
 
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Dto\Adresse;
-use App\Dto\AdressenDetails;
-use App\Dto\Kunde;
 use App\Dto\User as UserDto;
+use App\Dto\UserRead;
 use App\Entity\Sec\User as UserEntity;
-use App\Entity\Std\Customer;
 
 class UserEntityUserDtoProvider implements ProviderInterface
 {
@@ -24,7 +21,7 @@ class UserEntityUserDtoProvider implements ProviderInterface
      * @param array $uriVariables
      * @param array $context
      *
-     * @return UserDto|UserDto[]|null
+     * @return UserRead|UserRead[]|null
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): UserDto|array|null
     {
@@ -47,12 +44,10 @@ class UserEntityUserDtoProvider implements ProviderInterface
         return null;
     }
 
-    public static function userEntityToDto(UserEntity $userEntity): UserDto {
-       $user = (new UserDto())
+    public static function userEntityToDto(UserEntity $userEntity): UserRead {
+       return (new UserRead())
                 ->setUserName($userEntity->getEmail())
                 ->setActive($userEntity->isActive() ? 1 : 0)
                 ->setLastLogin($userEntity->getLastLogin());
-
-        return $user;
     }
 }

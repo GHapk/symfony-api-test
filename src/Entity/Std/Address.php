@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\DeleteAddressController;
 use App\Controller\GetAddressListContoller;
 use App\Dto\AdresseRead;
 use App\Dto\AdresseWrite;
@@ -47,6 +48,7 @@ use Doctrine\ORM\Mapping as ORM;
     ),
     new Delete(
         uriTemplate: '/adresse/{id}',
+        controller: DeleteAddressController::class,
         security: 'object.isBroker(user.getBroker().getId())'
     ),
 ],
@@ -70,7 +72,7 @@ class Address
     /**
      * @var iterable|CustomerAddress[]
      */
-    #[ORM\OneToMany(mappedBy: 'address', targetEntity: CustomerAddress::class, cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'address', targetEntity: CustomerAddress::class)]
     private iterable $customerAddresses = [];
 
     public function __construct() {
@@ -154,5 +156,17 @@ class Address
         return false;
     }
 
+    /**
+     * @return CustomerAddress[]
+     */
+    public function getCustomerAddresses(): iterable
+    {
+        return $this->customerAddresses;
+    }
 
+    public function setCustomerAddresses(iterable $customerAddresses): Address
+    {
+        $this->customerAddresses = $customerAddresses;
+        return $this;
+    }
 }

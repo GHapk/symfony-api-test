@@ -43,7 +43,9 @@ services:
     App\Processor\AdresseDtoAddressEntiyProcessor:
         bind:
             $entityManager: '@doctrine.orm.entity_manager'
-
+    App\Processor\UserDtoUserEntityProcessor:
+        bind:
+            $entityManager: '@doctrine.orm.entity_manager'
     App\Controller\GetCustomerListController:
         bind:
             $entityManager: '@doctrine.orm.entity_manager'

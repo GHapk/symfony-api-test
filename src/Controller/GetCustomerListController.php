@@ -7,7 +7,6 @@ use App\Provider\CustomerKundeProvider;
 use App\Repository\std\CustomerRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]

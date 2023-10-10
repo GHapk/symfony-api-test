@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\DeleteCustomerController;
 use App\Controller\GetCustomerListController;
+use App\Doctrine\Filter\SoftDeletableBoolInterface;
+use App\Doctrine\Filter\SoftDeletableInterface;
 use App\Dto\Kunde;
 use App\Entity\Sec\User;
 use App\Processor\CustomerKundeProcessor;
@@ -51,7 +53,7 @@ use Doctrine\ORM\Mapping as ORM;
     security: "is_granted('ROLE_BROKER')",
     provider: CustomerKundeProvider::class
 )]
-class Customer
+class Customer implements SoftDeletableInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -67,7 +69,7 @@ class Customer
     private ?\DateTime $birthday = null;
     #[ORM\Column(name: 'geloescht', type: 'integer', nullable: true)]
     private int $deleted = 0;
-    #[ORM\Column(name: 'geschlecht', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'geschlecht', type: 'string', nullable: true, columnDefinition: 'ENUM("männlich","weiblich","devers")')]
     private ?string $gender = null;
     #[ORM\Column(name: 'email', type: 'string', nullable: true)]
     private ?string $email = null;

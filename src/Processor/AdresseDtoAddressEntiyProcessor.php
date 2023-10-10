@@ -57,7 +57,5 @@ class AdresseDtoAddressEntiyProcessor implements ProcessorInterface
             ->setFederalState($this->entityManager->getReference(FederalState::class, $data->getBundesland()));
         $this->entityManager->persist($address);
         $this->entityManager->flush();
-
-        return $address;
     }
 }

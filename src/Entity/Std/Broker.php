@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace App\Entity\Std;
 
+use App\Doctrine\Filter\SoftDeletableInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'vermittler', schema: 'std')]
-class Broker
+class Broker implements SoftDeletableInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]

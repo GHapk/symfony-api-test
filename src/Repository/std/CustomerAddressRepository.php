@@ -9,7 +9,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class CustomerAddressRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerAddress::class);
@@ -35,5 +34,4 @@ class CustomerAddressRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
-
 }

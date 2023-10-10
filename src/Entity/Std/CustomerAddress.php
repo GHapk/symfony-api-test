@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace App\Entity\Std;
 
+use App\Doctrine\Filter\SoftDeletableInterface;
 use App\Repository\std\CustomerAddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerAddressRepository::class)]
 #[ORM\Table(name: 'kunde_adresse', schema: 'std')]
-class CustomerAddress
+class CustomerAddress implements SoftDeletableInterface
 {
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'customerAddresses')]

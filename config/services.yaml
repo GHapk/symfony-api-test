@@ -32,9 +32,15 @@ services:
         bind:
             $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
             $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
-
+    App\Provider\AddressEntityAdresseDtoProvider:
+        bind:
+            $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
+            $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
 
     App\Processor\CustomerKundeProcessor:
+        bind:
+            $entityManager: '@doctrine.orm.entity_manager'
+    App\Processor\AdresseDtoAddressEntiyProcessor:
         bind:
             $entityManager: '@doctrine.orm.entity_manager'
 
@@ -45,8 +51,13 @@ services:
         bind:
             $entityManager: '@doctrine.orm.entity_manager'
 
-    app.custom_authenticator:
-        class: App\Service\Authenticator
-        parent: lexik_jwt_authentication.security.jwt_authenticator
+    App\Service\CustomAuthorizationHeaderTokenExtractor: '@lexik_jwt_authentication.extractor.authorization_header_extractor'
+
+    lexik_jwt_authentication.extractor.authorization_header_extractor:
+        class: App\Service\CustomAuthorizationHeaderTokenExtractor
+        bind:
+            '$prefix': 'Bearer'
+            '$name': 'Authorization'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

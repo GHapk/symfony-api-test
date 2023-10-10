@@ -2,24 +2,30 @@
 declare(strict_types=1);
 namespace App\Dto;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Adresse
 {
+    #[Groups('read')]
     private ?int $adresseId = null;
     #[Assert\NotNull]
     #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private string $stasse = '';
     #[Assert\NotNull]
     #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private ?string $plz = '';
     #[Assert\NotNull]
     #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private string $ort = '';
     #[Assert\NotNull]
     #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private string $bundesland = '';
-    private ?AdressenDetails $details = null;
+    protected int $brokerId = 0;
 
     public function getAdresseId(): ?int
     {
@@ -81,17 +87,13 @@ class Adresse
         return $this;
     }
 
-    public function getDetails(): ?AdressenDetails
-    {
-        return $this->details;
-    }
-
-    public function setDetails(?AdressenDetails $details): Adresse
-    {
-        $this->details = $details;
+    public function setBrokerId(int $brokerId): Adresse {
+        $this->brokerId = $brokerId;
 
         return $this;
     }
 
-
+    public function isBroker($brokerId): bool {
+        return $this->brokerId === $brokerId;
+    }
 }

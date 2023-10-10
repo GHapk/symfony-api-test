@@ -48,7 +48,7 @@ class UserEntityUserDtoProvider implements ProviderInterface
     }
 
     public static function userEntityToDto(UserEntity $userEntity): UserDto {
-       $user = (new User())
+       $user = (new UserDto())
                 ->setUserName($userEntity->getEmail())
                 ->setActive($userEntity->isActive() ? 1 : 0)
                 ->setLastLogin($userEntity->getLastLogin());

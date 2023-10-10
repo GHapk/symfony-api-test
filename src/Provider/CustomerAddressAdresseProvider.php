@@ -45,12 +45,10 @@ class CustomerAddressAdresseProvider implements ProviderInterface
     }
 
     public static function customerAddressToAdresse(CustomerAddress $customerAddress): Adresse {
-        $adresse = (new Adresse())
-            ->setAdresseId($customerAddress->getAddress()->getId())
-            ->setStasse($customerAddress->getAddress()->getStreet())
-            ->setPlz($customerAddress->getAddress()->getZip())
-            ->setOrt($customerAddress->getAddress()->getCity())
-            ->setBundesland($customerAddress->getAddress()->getFederalState()->getShort());
+        $adresse = AddressEntityAdresseDtoProvider::addressEntityToDto(
+            $customerAddress->getAddress(),
+            $customerAddress->getCustomer()->getBroker()->getId()
+        );
         $adressenDetails = (new AdressenDetails())
             ->setRechnungsadresse($customerAddress->isBillingAddress())
             ->setGeschaeftlich($customerAddress->isCommercial());

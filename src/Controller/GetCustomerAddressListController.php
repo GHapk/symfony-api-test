@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Std\CustomerAddress;
 use App\Provider\CustomerAddressAdresseProvider;
-use App\Repository\std\CustomerRepository;
+use App\Repository\std\CustomerAddressRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -20,7 +20,7 @@ class GetCustomerAddressListController extends AbstractController
         if ($currentUser === null) {
             return [];
         }
-        /** @var CustomerRepository $repo */
+        /** @var CustomerAddressRepository $repo */
         $repo = $this->entityManager->getRepository(CustomerAddress::class);
 
         $result = $repo->fetchAllActiveForBrokerId($currentUser->getBroker()->getId());
